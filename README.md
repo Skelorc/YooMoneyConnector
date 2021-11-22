@@ -23,9 +23,9 @@
 
 Параметр proxy принимает на вход прокси, Например: 
 
- `InetSocketAddress proxyAddress = new InetSocketAddress("your_host", port);
+ `InetSocketAddress proxyAddress = new InetSocketAddress("your_host", port);`
  
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, proxyAddress);`
+  `Proxy proxy = new Proxy(Proxy.Type.HTTP, proxyAddress);`
         
 2. Далее выполняем метод, который будет ожидать от вас ввода кода:
 
