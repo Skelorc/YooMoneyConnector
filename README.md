@@ -14,20 +14,21 @@
 
 1. Создаёте класс:
 
-YooMoneyConnector yooMoneyConnector = new YooMoneyConnector("YOUR_CLIENT_ID", "YOUR_REDIRECT_URI", "RECEIVER");
+`YooMoneyConnector yooMoneyConnector = new YooMoneyConnector("YOUR_CLIENT_ID", "YOUR_REDIRECT_URI", "RECEIVER");`
 
 Если нужно proxy, то есть дополнительный конструктор 
 
-YooMoneyConnector yooMoneyConnector = new YooMoneyConnector(proxy, "YOUR_CLIENT_ID", "YOUR_REDIRECT_URI", "RECEIVER");
+`YooMoneyConnector yooMoneyConnector = new YooMoneyConnector(proxy, "YOUR_CLIENT_ID", "YOUR_REDIRECT_URI", "RECEIVER");`
 
 Параметр proxy принимает на вход прокси, Например: 
 
- InetSocketAddress proxyAddress = new InetSocketAddress("your_host", port);
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, proxyAddress);
+ `InetSocketAddress proxyAddress = new InetSocketAddress("your_host", port);
+ 
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, proxyAddress);`
         
 2. Далее выполняем метод, который будет ожидать от вас ввода кода:
 
-yooMoneyConnector.auth();
+`yooMoneyConnector.auth();`
 
 Он отправляет запрос на хостинг, для получения краткосрочного токена, который нам нужно будет обменять на постоянный. Также этот метод передаёт список параметров, которые дают разрешения нашему приложению. В данном случае, мне требовалась лишь информация о платежах и аккаунтах, как вы видите в коде.
 
@@ -39,25 +40,25 @@ yooMoneyConnector.auth();
 
 После этого, не раздумывая долго, смело вызывайте метод 
 
-yooMoneyConnector.changeToken();
+`yooMoneyConnector.changeToken();`
 
 Если всё ОК, то после работы метода, вы увидите в консоли свой токен. Сохраняем его! Теперь приложение и юмани связаны, прекрасно!
 
 Данный метод возвращает HashMap с данными вашего аккаунта.
 
-yooMoneyConnector.getAccountInfo();
+`yooMoneyConnector.getAccountInfo();`
 
 Теперь перейдём к выставлению счёта. 
 
 Вызываем метод 
 
-yooMoneyConnector.sendpayment("your_receiver", тип платежа (например "donate"), описание платеж (Например "Платёж от моего приложения"), (Параметры для оплаты через юмани)"PC",(Параметр для оплаты банковской картой) "AC",(Сумма платежа) "10",(САМОЕ главное - label платежа, по нему мы будем определять того, кто оплатил) "id_покупателя_001");
+`yooMoneyConnector.sendpayment("your_receiver", тип платежа (например "donate"), описание платеж (Например "Платёж от моего приложения"), (Параметры для оплаты через юмани)"PC",(Параметр для оплаты банковской картой) "AC",(Сумма платежа) "10",(САМОЕ главное - label платежа, по нему мы будем определять того, кто оплатил) "id_покупателя_001");`
 
 В ответ вызов этого метода, мы получем url - счета, который нужно отправить покупателю. 
 
 Далее проверяем наш аккаунт, методом 
 
-yooMoneyConnector.getAccountHistory((Количество записей, которые мы получим)"3");
+`yooMoneyConnector.getAccountHistory((Количество записей, которые мы получим)"3");`
 
 В ответ получаем HashMap с данными истории. Проверяем эту мапу на значение id_покупателя_001, если там такое значение есть, проверяем у этого значение поле status, если оно равняется success, значит всё ок, деньги у нас на кошельке.
 
