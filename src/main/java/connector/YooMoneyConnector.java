@@ -1,12 +1,16 @@
 package connector;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import okhttp3.*;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -103,7 +107,7 @@ public class YooMoneyConnector {
         return getMapFromResponse(request);
     }
 
-    public HashMap<String, String> getAccountHistory(String records_count) throws IOException {
+    public List<Operations> getAccountHistory(String records_count) throws IOException {
         formBody = new FormBody.Builder()
                 .add("code", records_count)
                 .build();
@@ -113,7 +117,16 @@ public class YooMoneyConnector {
                 .url(ConstantsHosts.HOST_FOR_ACCOUNT_HISTORY)
                 .post(formBody)
                 .build();
-        return getMapFromResponse(request);
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String body = response.body().string();
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ListOperations>(){}.getType();
+        ListOperations listOperationsObject = gson.fromJson(body, listType);
+        return listOperationsObject.getList_operations();
     }
 
     public void sendpayment(String receiver, String form_name, String target, String paymentType_1, String paymentType_2, String sum, String label) throws IOException {
@@ -163,9 +176,6 @@ public class YooMoneyConnector {
         JSONObject json = new JSONObject(uri);
         return (HashMap) json.toMap();
     }
-
-
-
 
 
 }
