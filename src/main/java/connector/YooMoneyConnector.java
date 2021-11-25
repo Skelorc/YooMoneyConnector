@@ -64,7 +64,7 @@ public class YooMoneyConnector {
                 String uri = response.toString();
                 String url = uri.substring(uri.indexOf("url=") + 4, uri.length() - 1);
                 System.out.println("Посетите веб сайт и подтвердите разрешение приложению. Ссылка: " + url);
-
+                response.close();
             } else {
                 System.out.println("Ошибка при запросе. Проверьте вводимые client_id  и redirect_uri");
             }
@@ -126,6 +126,7 @@ public class YooMoneyConnector {
         Gson gson = new Gson();
         Type listType = new TypeToken<ListOperations>(){}.getType();
         ListOperations listOperationsObject = gson.fromJson(body, listType);
+        response.close();
         return listOperationsObject.getList_operations();
     }
 
@@ -147,15 +148,16 @@ public class YooMoneyConnector {
                 .url(ConstantsHosts.HOST_FOR_SEND_PAYMENT)
                 .post(formBody)
                 .build();
-
-        try {
+        
+       try {
             response = client.newCall(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
         String uri = response.toString();
         String url = uri.substring(uri.indexOf("url=") + 4, uri.length() - 1);
-        System.out.println(url);
+       System.out.println(url);
+        response.close();
     }
 
     private void save_code_from_console() {
@@ -174,6 +176,7 @@ public class YooMoneyConnector {
         }
         String uri = response.body().string();
         JSONObject json = new JSONObject(uri);
+        response.close();
         return (HashMap) json.toMap();
     }
 
